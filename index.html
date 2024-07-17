@@ -11,68 +11,98 @@
     <div class="wrapper">
       <div class="container">
 
-        <header class="header">
+        <div class="game-content">
+          <header class="header">
 
-          <div class="select-wrapper">
-            <label for="select-size">Grid size</label>
-            <select name="size" id="select-size" class="select">
-              <option>4x4</option>
-              <option>5x5</option>
-              <option>6x6</option>
-              <option>7x7</option>
-              <option>8x8</option>
-            </select>
-          </div>
-
-          <div class="select-wrapper">
-            <label for="select-win__pts">Points to win</label>
-            <select name="win-pts" id="select-win__pts" class="select">
-              <option>20 pts</option>
-              <option>40 pts</option>
-              <option>50 pts</option>
-              <option>60 pts</option>
-              <option>80 pts</option>
-            </select>
-          </div>
-
-          <div class="select-wrapper">
-            <label for="select-lose__pts">Points to win</label>
-            <select name="win-pts" id="select-lose__pts" class="select">
-              <option>5 pts</option>
-              <option>10 pts</option>
-              <option>15 pts</option>
-              <option>20 pts</option>
-              <option>25 pts</option>
-            </select>
-          </div>
-
-        </header>
-
-        <main class="main">
-
-          <button class="start-btn">START</button>
-
-          <div class="main-content">
-
-            <div class="game-account">
-              <div class="account">
-                <span class="account-title">Catch:</span>
-                <span class="count">0</span>
-              </div>
-              <div class="account">
-                <span class="account-title">Miss:</span>
-                <span class="count">0</span>
-              </div>
+            <div class="select-wrapper">
+              <label for="select-size">Grid size</label>
+              <select name="size" id="select-size" class="select">
+                <option>4x4</option>
+                <option>5x5</option>
+                <option>6x6</option>
+                <option>7x7</option>
+                <option>8x8</option>
+              </select>
             </div>
 
-            <div class="playing-field">
+            <div class="select-wrapper">
+              <label for="select-win__pts">Points to win</label>
+              <select name="win-pts" id="select-win__pts" class="select">
+                <option>20 pts</option>
+                <option>40 pts</option>
+                <option>50 pts</option>
+                <option>60 pts</option>
+                <option>80 pts</option>
+              </select>
+            </div>
+
+            <div class="select-wrapper">
+              <label for="select-lose__pts">Points to win</label>
+              <select name="win-pts" id="select-lose__pts" class="select">
+                <option>5 pts</option>
+                <option>10 pts</option>
+                <option>15 pts</option>
+                <option>20 pts</option>
+                <option>25 pts</option>
+              </select>
+            </div>
+
+          </header>
+
+          <main class="main">
+
+            <button class="start-btn">START</button>
+
+            <div class="main-content">
+
+              <div class="game-account">
+                <div class="account">
+                  <span class="account-title">Catch:</span>
+                  <span class="count">0</span>
+                </div>
+                <div class="account">
+                  <span class="account-title">Miss:</span>
+                  <span class="count">0</span>
+                </div>
+              </div>
+
+              <div class="playing-field">
+                <div class="grid-wrap">
+                  <div class="field">
+                    <img src="src/assets/google.svg" alt="google image">
+                  </div>
+                  <div class="field"></div>
+                  <div class="field"></div>
+                  <div class="field"></div>
+                  <div class="field"></div>
+                  <div class="field"></div>
+                  <div class="field"></div>
+                  <div class="field"></div>
+                  <div class="field"></div>
+                  <div class="field"></div>
+                  <div class="field"></div>
+                  <div class="field"></div>
+                  <div class="field"></div>
+                  <div class="field"></div>
+                  <div class="field"></div>
+                  <div class="field">
+                    <img src="src/assets/person.svg" alt="player image">
+                  </div>
+                </div>
+              </div>
 
             </div>
 
-          </div>
+          </main>
+        </div>
 
-        </main>
-        <footer></footer>
+        <div class="modal-wra">
+          <div class="modal">
+            <div class="down-elem">
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
     <script type="module" src="/src/main.ts"></script>

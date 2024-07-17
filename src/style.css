@@ -26,6 +26,11 @@ body {
   max-width: 1140px;
   margin: 0 auto;
   padding: 0 10px;
+  height: 100%;
+}
+
+.game-content {
+  /*display: none;*/
 }
 
 .header {
@@ -106,4 +111,44 @@ label {
   font-size: 24px;
   font-weight: 500;
   line-height: 24px;
+}
+
+.playing-field {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
+}
+
+.grid-wrap {
+  display: grid;
+  grid-template-columns: repeat(4, 85px);
+  grid-template-rows: repeat(4, 85px);
+  gap: 10px;
+}
+
+.field {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 85px;
+  height: 85px;
+  background-color: rgba(110, 117, 102, 0.3);
+  border: 2px solid rgba(153, 155, 149, 1);
+  border-radius: 5px;
+}
+
+.modal-wra {
+  height: 100%;
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+
+}
+
+.down-elem {
+
 }
