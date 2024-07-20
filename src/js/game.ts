@@ -1,7 +1,7 @@
 type SettingsType = {
   gridSize: {
-    rows: number;
     cols: number;
+    rows: number;
   }
 }
 
@@ -12,12 +12,21 @@ type PositionType = {
   y: number;
 }
 
+type PlayerType = {
+  id: number;
+  position: PositionType;
+}
+
+type GoogleType = {
+  position: PositionType;
+}
+
 export class Game {
   #settings: SettingsType;
   #status: StatusType = 'pending';
-  #player1;
-  #player2;
-  #google;
+  #player1: PlayerType;
+  #player2: PlayerType;
+  #google: GoogleType;
 
   #getRandomPosition(existedPosition: PositionType[] = []): PositionType {
     let newX;
@@ -61,6 +70,18 @@ export class Game {
   get status() {
     return this.#status;
   }
+
+  get player1() {
+    return this.#player1;
+  }
+
+  get player2() {
+    return this.#player2;
+  }
+
+  get google() {
+    return this.#google;
+  }
 }
 
 class Unit {
@@ -72,7 +93,6 @@ class Unit {
 
 class Player extends Unit {
   id: number;
-  position: PositionType;
   constructor(id, position) {
     super(position)
     this.id = id;
@@ -80,7 +100,6 @@ class Player extends Unit {
 }
 
 class Google extends Unit{
-  position: PositionType;
   constructor(position) {
     super(position)
   }
