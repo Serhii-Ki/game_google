@@ -1,15 +1,24 @@
-import { describe, it, expect } from 'vitest';
+import {describe, it, expect, beforeEach, afterEach} from 'vitest';
 import {Game} from './game.ts';
 
 describe('game test', () => {
-  it('initialization test', async () => {
-    const game = new Game();
+  let game
+  beforeEach(() => {
+    game = new Game();
+  });
 
+  afterEach(async () => {
+    await game.stop();
+  })
+
+  it('initialization test', async () => {
     game.settings = {
       gridSize: {
         cols: 4,
         rows: 5
-      }
+      },
+      googleJumpInterval: 0,
+      pointsToWin: 10
     };
 
     expect(game.status).toBe('pending');
@@ -18,12 +27,13 @@ describe('game test', () => {
   });
 
   it('player1, player2 and google should have unique coordinates', async () => {
-    const game = new Game();
     game.settings = {
       gridSize: {
         rows: 3,
         cols: 1
-      }
+      },
+      googleJumpInterval: 0,
+      pointsToWin: 10
     };
 
     await game.start();
@@ -45,4 +55,27 @@ describe('game test', () => {
 
   });
 
-})
+  it('google position should changed', async () => {
+    game.settings = {
+      gridSize: {
+        rows: 2,
+        cols: 2
+      },
+      googleJumpInterval: 100,
+      pointsToWin: 10
+    };
+
+    await game.start();
+    const prevGooglePosition = game.player1.position.clone()
+    await delay(110);
+
+    expect(prevGooglePosition.equal(game.google.position)).toBe(false);
+  });
+
+});
+
+function delay (ms: number)  {
+  return new Promise(resolve => {
+    setTimeout(resolve, ms)
+  })
+}
