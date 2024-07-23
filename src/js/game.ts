@@ -1,10 +1,11 @@
-type SettingsType = {
+export type SettingsType = {
   gridSize: {
     cols: number;
     rows: number;
   },
   googleJumpInterval: number;
   pointsToWin: number;
+  pointsToLose: number;
 }
 
 type StatusType = 'pending' | 'in-process' | 'paused';
@@ -36,7 +37,7 @@ export class Game {
   #score: ScoreType = {
     1: {points: 0},
     2: {points: 0}
-  }
+  };
 
   #getRandomPosition(existedPosition: Position[] = []): Position {
     let newX;
@@ -121,7 +122,7 @@ export class Game {
   #googleCatching(player: PlayerType) {
     if(player.position.equal(this.#google.position)) {
       this.#score[player.id].points += 1;
-      if(this.#score[player.id] === this.#settings.pointsToWin){
+      if(this.#score[player.id].points === this.#settings.pointsToWin){
         this.stop()
       } else {
         this.#moveGoogleToRandomPosition(false);
