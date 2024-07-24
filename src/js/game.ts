@@ -23,7 +23,7 @@ type GoogleType = {
 
 type DeltaType = {x: number} | {y: number}
 
-type ScoreType = {
+export type ScoreType = {
   [playerId: number]: {points: number}
 }
 
@@ -36,7 +36,8 @@ export class Game {
   #googleJumpIntervalId: number;
   #score: ScoreType = {
     1: {points: 0},
-    2: {points: 0}
+    2: {points: 0},
+    3: {points: 0}
   };
 
   #getRandomPosition(existedPosition: Position[] = []): Position {
@@ -70,15 +71,18 @@ export class Game {
     this.#player2 = new Player(2, player2Position);
 
     this.#moveGoogleToRandomPosition(true);
+
   }
 
 
   async start() {
     if(this.#status === 'pending') {
       this.#status = 'in-process';
-      this.#createUnits()
+      this.#createUnits();
+      console.log('GOOGLE',this.#google.position)
+      console.log('PLAYER1',this.#player1.position)
+      console.log('PLAYER2',this.#player2.position)
     }
-
     this.#googleJumpIntervalId = setInterval(() => this.#moveGoogleToRandomPosition(false), this.#settings.googleJumpInterval)
   }
 
@@ -236,21 +240,19 @@ class Unit {
 
 class Player extends Unit {
   id: number;
-  position: Position;
-  constructor(id, position) {
+  constructor(id, position: Position) {
     super(position)
     this.id = id;
   }
 }
 
 class Google extends Unit{
-  position: Position;
-  constructor(position) {
+  constructor(position: Position) {
     super(position)
   }
 }
 
-class Position {
+export class Position {
   x: number;
   y: number;
   constructor(x, y) {

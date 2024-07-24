@@ -17,9 +17,8 @@ body {
 
 .wrapper {
   min-height: 100vh;
-  height: 100%;
   background: center / cover no-repeat url("./assets/bg.png");
-  padding: 50px 0;
+  padding: 20px 0;
 }
 
 .container {
@@ -63,17 +62,15 @@ label {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 100px;
+  margin-top: 30px;
 }
 
 .main-content {
   display: none;
 }
 
-.start-btn {
-  display: block;
+.btn {
   outline: none;
-  margin-top: 15%;
   background-color: rgba(88, 191, 57, 1);
   border: 1px solid rgba(117, 249, 76, 1);
   border-radius: 10px 2px 10px 2px;
@@ -89,12 +86,29 @@ label {
   }
 }
 
+.start-btn {
+  display: block;
+  margin-top: 15%;
+}
+
+.menu-btn_wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
+}
+
+.menu-btn {
+  display: none;
+}
+
 .game-account {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 376px;
-  padding: 12px 36px;
+  gap: 70px;
+  max-width: 1000px;
+  padding: 10px 30px;
   background-color: rgba(57, 61, 55, 0.4);
   border: 1px solid rgba(76, 94, 80, 1);
   border-radius: 30px;
@@ -105,6 +119,10 @@ label {
   display: flex;
   align-items: center;
   gap: 10px;
+}
+
+.account-img {
+  height: 30px;
 }
 
 .account-title {
@@ -118,17 +136,24 @@ label {
   line-height: 24px;
 }
 
+.game-control {
+  background-color: rgba(57, 61, 55, 0.4);
+  border: 1px solid rgba(76, 94, 80, 1);
+  padding: 5px 10px;
+  max-width: 500px;
+  text-align: center;
+  margin: 20px auto 0 auto;
+}
+
 .playing-field {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 50px;
+  margin-top: 30px;
 }
 
 .grid-wrap {
   display: grid;
-  grid-template-columns: repeat(4, 85px);
-  grid-template-rows: repeat(4, 85px);
   gap: 10px;
 }
 
