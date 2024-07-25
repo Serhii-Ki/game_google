@@ -1,3 +1,5 @@
+import {EventEmitter} from "./eventEmitter.ts";
+
 export type SettingsType = {
   gridSize: {
     cols: number;
@@ -39,6 +41,11 @@ export class Game {
     2: {points: 0},
     3: {points: 0}
   };
+  eventEmitter: EventEmitter
+
+  constructor(eventEmitter: EventEmitter) {
+    this.eventEmitter = eventEmitter
+  }
 
   #getRandomPosition(existedPosition: Position[] = []): Position {
     let newX;
@@ -61,6 +68,7 @@ export class Game {
     }
 
     this.#google = new Google(this.#getRandomPosition(occupiedPositions));
+    // this.eventEmitter.emit()
   }
 
   #createUnits() {
@@ -79,9 +87,6 @@ export class Game {
     if(this.#status === 'pending') {
       this.#status = 'in-process';
       this.#createUnits();
-      console.log('GOOGLE',this.#google.position)
-      console.log('PLAYER1',this.#player1.position)
-      console.log('PLAYER2',this.#player2.position)
     }
     this.#googleJumpIntervalId = setInterval(() => this.#moveGoogleToRandomPosition(false), this.#settings.googleJumpInterval)
   }

@@ -1,4 +1,5 @@
 import {Game, Position, ScoreType, SettingsType} from './js/game.ts';
+import {EventEmitter} from "./js/eventEmitter.ts";
 
 function game() {
   const selectSettings = document.querySelectorAll<HTMLSelectElement>('.select');
@@ -41,7 +42,8 @@ function game() {
   const startGame = () => {
     goStartDisplay();
 
-    const startGame = new Game();
+    const eventEmitter = new EventEmitter();
+    const startGame = new Game(eventEmitter);
     startGame.settings = getSettings();
     startGame.start();
     const settings: SettingsType = startGame.settings
@@ -59,29 +61,55 @@ function game() {
     gridField.style.gridTemplateColumns = `repeat(${settings.gridSize.cols}, 85px)`;
 
     gridField.innerHTML = '';
-    for (let row = 0; row < settings.gridSize.rows; row++) {
-      for (let col = 0; col < settings.gridSize.cols; col++) {
+    for (let row = 1; row <= settings.gridSize.rows; row++) {
+      for (let col = 1; col <= settings.gridSize.cols; col++) {
         const field = document.createElement('div');
         field.classList.add('field');
         gridField.appendChild(field);
+
+        if(row === player1Position.x && col === player1Position.y) {
+          console.log('Row Col', row, col);
+          console.log('Player1 for', player1Position);
+          field.innerHTML = '<img src="src/assets/player1.svg" alt="player1 image">';
+        } else if( row === player2Position.x && col === player2Position.y){
+          field.innerHTML = '<img src="src/assets/player2.svg" alt="player2 image">';
+          console.log('Player2 for', player2Position);
+          console.log('Player2 Row Col', row, col);
+        } else if(row === googlePosition.x && col === googlePosition.y) {
+          field.innerHTML = '<img src="src/assets/google.svg" alt="google image">';
+          console.log('googlePosition', googlePosition);
+        }
       }
     }
-    const fields = gridField.querySelectorAll('.field');
-    fields.forEach((field, index) => {
-      const row = Math.floor(index / settings.gridSize.cols);
-      const col = index % settings.gridSize.cols;
 
-      if (row === player1Position.y && col === player1Position.x) {
-        console.log('Player1 for', row, col);
-        field.innerHTML = '<img src="src/assets/player1.svg" alt="player1 image">';
-      } else if (row === player2Position.y && col === player2Position.x) {
-        console.log('Player2 for', row, col);
-        field.innerHTML = '<img src="src/assets/player2.svg" alt="player2 image">';
-      } else if (row === googlePosition.y && col === googlePosition.x) {
-        console.log('Google for', row, col);
-        field.innerHTML = '<img src="src/assets/google.svg" alt="google image">';
+    document.addEventListener('keydown', (event: KeyboardEvent) => {
+      switch (event.code) {
+        case 'ArrowLeft':
+          startGame.movePlayer1Left();
+          break;
+        case 'ArrowRight':
+          startGame.movePlayer1Right();
+          break;
+        case 'ArrowUp':
+          startGame.movePlayer1Up();
+          break;
+        case 'ArrowDown':
+          startGame.movePlayer1Down();
+          break;
+        case 'KeyA':
+          startGame.movePlayer2Left();
+          break;
+        case 'KeyD':
+          startGame.movePlayer2Right();
+          break;
+        case 'KeyW':
+          startGame.movePlayer2Up();
+          break;
+        case 'KeyS':
+          startGame.movePlayer2Down();
+          break;
       }
-    });
+    })
   }
 
   startBtn.addEventListener('click', () => {
@@ -91,6 +119,7 @@ function game() {
   menuBtn.addEventListener('click', () => {
     goMenuDisplay()
   });
+
 }
 
 game();
