@@ -1,7 +1,7 @@
 export class EventEmitter {
   subscribers = {};
 
-  subscribe(eventName: string, callback) {
+  subscribe(eventName: string, callback: Function) {
     if (!this.subscribers[eventName]) {
       this.subscribers[eventName] = [];
     }
