@@ -10,7 +10,7 @@ export type SettingsType = {
   pointsToLose: number;
 }
 
-type StatusType = 'pending' | 'in-process' | 'paused';
+type StatusType = 'pending' | 'in-process' | 'paused' | 'finished';
 
 
 
@@ -61,6 +61,10 @@ export class Game {
   }
 
   #moveGoogleToRandomPosition(excludeGoogle: boolean) {
+    if(this.#score[3].points === this.#settings.pointsToLose){
+      this.finishedGame()
+      return;
+    }
     let occupiedPositions = [this.#player1.position, this.#player2.position];
 
     if(!excludeGoogle) {
@@ -68,7 +72,7 @@ export class Game {
     }
 
     this.#google = new Google(this.#getRandomPosition(occupiedPositions));
-    // this.eventEmitter.emit()
+    this.eventEmitter.emit('changePosition')
   }
 
   #createUnits() {
@@ -82,19 +86,31 @@ export class Game {
 
   }
 
+  #startInterval() {
+    this.#googleJumpIntervalId = setInterval(() => {
+      this.#score[3].points += 1;
+      this.#moveGoogleToRandomPosition(false);
+    }, this.#settings.googleJumpInterval)
+  }
 
   async start() {
     if(this.#status === 'pending') {
       this.#status = 'in-process';
       this.#createUnits();
     }
-    this.#googleJumpIntervalId = setInterval(() => this.#moveGoogleToRandomPosition(false), this.#settings.googleJumpInterval)
+    this.#startInterval();
   }
 
   async stop() {
     this.#status = 'paused';
-
     clearInterval(this.#googleJumpIntervalId);
+  }
+
+  finishedGame() {
+    this.#status = 'finished';
+    this.#google = new Google(new Position(0,  0));
+    clearInterval(this.#googleJumpIntervalId);
+    this.eventEmitter.emit('changePosition')
   }
 
   //Проверки местоположения
@@ -103,12 +119,12 @@ export class Game {
 
     if('x' in delta) {
       newPosition.x += delta.x;
-      if(newPosition.x < 0 || newPosition.x >= this.#settings.gridSize.cols) {
+      if(newPosition.x < 1 || newPosition.x > this.#settings.gridSize.cols) {
         return false;
       }
     } else if('y' in delta) {
       newPosition.y += delta.y;
-      if(newPosition.y < 0 || newPosition.y >= this.#settings.gridSize.rows) {
+      if(newPosition.y < 1 || newPosition.y > this.#settings.gridSize.rows) {
         return false;
       }
     }
@@ -132,8 +148,10 @@ export class Game {
     if(player.position.equal(this.#google.position)) {
       this.#score[player.id].points += 1;
       if(this.#score[player.id].points === this.#settings.pointsToWin){
-        this.stop()
+        this.finishedGame()
       } else {
+        clearInterval(this.#googleJumpIntervalId);
+        this.#startInterval();
         this.#moveGoogleToRandomPosition(false);
       }
     } else {
@@ -156,6 +174,7 @@ export class Game {
     }
 
     this.#googleCatching(movePlayer);
+    this.eventEmitter.emit('changePosition');
   }
 
   //Перемещение игроков

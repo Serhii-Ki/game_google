@@ -11,6 +11,7 @@ function game() {
   const googleCount = document.querySelector<HTMLSpanElement>('.google-count');
   const timer = document.querySelector<HTMLSpanElement>('.timer');
   const gridField = document.querySelector<HTMLDivElement>('.grid-wrap');
+  const winText = document.querySelector<HTMLHtmlElement>('.finished-game');
 
   const getSettings = (): SettingsType => {
     return {
@@ -18,7 +19,7 @@ function game() {
         rows: parseInt(selectSettings[0].value),
         cols: parseInt(selectSettings[1].value)
       },
-      googleJumpInterval: 5000,
+      googleJumpInterval: 2000,
       pointsToWin: parseInt(selectSettings[2].value),
       pointsToLose: parseInt(selectSettings[3].value)
     };
@@ -30,14 +31,7 @@ function game() {
     startBtn.style.display = 'none';
     selectSettings.forEach(select => select.disabled = true);
 
-  }
-
-  const goMenuDisplay = () => {
-    gameDisplay.style.display = 'none';
-    menuBtn.style.display = 'none';
-    startBtn.style.display = 'block';
-    selectSettings.forEach(select => select.disabled = false);
-  }
+  };
 
   const startGame = () => {
     goStartDisplay();
@@ -48,41 +42,61 @@ function game() {
     startGame.start();
     const settings: SettingsType = startGame.settings
     const score: ScoreType = startGame.score;
-    const player1Position: Position = startGame.player1.position;
-    const player2Position: Position = startGame.player2.position;
-    const googlePosition: Position = startGame.google.position;
-
-
-    player1Count.textContent = score[1].points.toString();
-    player2Count.textContent = score[2].points.toString();
-    googleCount.textContent = score[3].points.toString();
-    timer.textContent = (settings.googleJumpInterval / 1000).toString();
     gridField.style.gridTemplateRows = `repeat(${settings.gridSize.rows}, 85px)`;
     gridField.style.gridTemplateColumns = `repeat(${settings.gridSize.cols}, 85px)`;
+    console.log(startGame.settings.pointsToLose)
+    const setPointsTimer = () => {
+      player1Count.textContent = score[1].points.toString();
+      player2Count.textContent = score[2].points.toString();
+      googleCount.textContent = score[3].points.toString();
+    }
 
-    gridField.innerHTML = '';
-    for (let row = 1; row <= settings.gridSize.rows; row++) {
-      for (let col = 1; col <= settings.gridSize.cols; col++) {
-        const field = document.createElement('div');
-        field.classList.add('field');
-        gridField.appendChild(field);
+    setPointsTimer();
 
-        if(row === player1Position.x && col === player1Position.y) {
-          console.log('Row Col', row, col);
-          console.log('Player1 for', player1Position);
-          field.innerHTML = '<img src="src/assets/player1.svg" alt="player1 image">';
-        } else if( row === player2Position.x && col === player2Position.y){
-          field.innerHTML = '<img src="src/assets/player2.svg" alt="player2 image">';
-          console.log('Player2 for', player2Position);
-          console.log('Player2 Row Col', row, col);
-        } else if(row === googlePosition.x && col === googlePosition.y) {
-          field.innerHTML = '<img src="src/assets/google.svg" alt="google image">';
-          console.log('googlePosition', googlePosition);
+    const winGame = () => {
+      if(score[3].points === settings.pointsToLose) {
+        winText.textContent = 'Google wins!';
+        winText.style.opacity = '1';
+      } else if (score[2].points === settings.pointsToWin) {
+        winText.textContent = 'Player 2 wins!';
+        winText.style.opacity = '1';
+      } else if (score[1].points === settings.pointsToWin) {
+        winText.textContent = 'Player 1 wins!';
+        winText.style.opacity = '1';
+      }
+    }
+
+    const render = () => {
+      winGame()
+      gridField.innerHTML = '';
+      let player1Position: Position = startGame.player1.position;
+      let player2Position: Position = startGame.player2.position;
+      let googlePosition: Position = startGame.google.position;
+
+      setPointsTimer();
+
+      for (let row = 1; row <= settings.gridSize.rows; row++) {
+        for (let col = 1; col <= settings.gridSize.cols; col++) {
+          const field = document.createElement('div');
+          field.classList.add('field');
+          gridField.appendChild(field);
+
+          if (row === player1Position.y && col === player1Position.x) {
+            field.innerHTML = '<img src="src/assets/player1.svg" alt="player1 image">';
+          } else if (row === player2Position.y && col === player2Position.x) {
+            field.innerHTML = '<img src="src/assets/player2.svg" alt="player2 image">';
+          } else if (row === googlePosition.y && col === googlePosition.x) {
+            field.innerHTML = '<img src="src/assets/google.svg" alt="google image">';
+          }
         }
       }
     }
 
-    document.addEventListener('keydown', (event: KeyboardEvent) => {
+    render();
+
+    startGame.eventEmitter.subscribe('changePosition', render)
+
+    window.addEventListener('keydown', (event: KeyboardEvent) => {
       switch (event.code) {
         case 'ArrowLeft':
           startGame.movePlayer1Left();
@@ -109,15 +123,26 @@ function game() {
           startGame.movePlayer2Down();
           break;
       }
-    })
+    });
+
+    const goMenuDisplay = () => {
+      gameDisplay.style.display = 'none';
+      menuBtn.style.display = 'none';
+      startBtn.style.display = 'block';
+      selectSettings.forEach(select => select.disabled = false);
+      winText.textContent = '';
+      winText.style.opacity = '0';
+      startGame.stop();
+    }
+
+    menuBtn.addEventListener('click', () => {
+      goMenuDisplay()
+    });
+
   }
 
   startBtn.addEventListener('click', () => {
     startGame()
-  });
-
-  menuBtn.addEventListener('click', () => {
-    goMenuDisplay()
   });
 
 }

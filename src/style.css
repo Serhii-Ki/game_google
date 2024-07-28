@@ -168,6 +168,15 @@ label {
   border-radius: 5px;
 }
 
+.finished-game {
+  opacity: 0;
+  position: absolute;
+  font-size: 106px;
+  color: rgba(117, 249, 76, 1);
+  pointer-events: none;
+  transition: opacity 200ms linear;
+}
+
 .modal-wra {
   height: 100%;
   display: none;
